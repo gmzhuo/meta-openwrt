@@ -1,0 +1,100 @@
+Index: libubox-2018-02-08-bb0c830b/lua/uloop.c
+===================================================================
+--- libubox-2018-02-08-bb0c830b.orig/lua/uloop.c
++++ libubox-2018-02-08-bb0c830b/lua/uloop.c
+@@ -196,6 +196,20 @@
+ 	return fd;
+ }
+ 
++static int ul_ufd_set(lua_State *L)
++{
++	unsigned int flags = 0;
++	struct lua_uloop_fd *ufd = lua_touserdata(L, 1);
++
++	if (lua_isnumber(L, -1)) {
++		flags = lua_tointeger(L, -1);
++	}
++
++	uloop_fd_add(&ufd->fd, flags);
++
++	return 0;
++}
++
+ static int ul_ufd_delete(lua_State *L)
+ {
+ 	struct lua_uloop_fd *ufd = lua_touserdata(L, 1);
+@@ -221,6 +234,7 @@
+ 
+ static const luaL_Reg ufd_m[] = {
+ 	{ "delete", ul_ufd_delete },
++	{ "add", ul_ufd_set },
+ 	{ NULL, NULL }
+ };
+ 
+@@ -317,7 +332,10 @@ static void ul_process_cb(struct uloop_p
+ 	proc->r = LUA_NOREF;
+ 	lua_remove(state, -2);
+ 	lua_pushinteger(state, ret >> 8);
+-	lua_call(state, 1, 0);
++
++	lua_pushinteger(state, proc->p.pid);
++
++	lua_call(state, 2, 0);
+ }
+ 
+ static int ul_process(lua_State *L)
+@@ -386,6 +404,46 @@ static int ul_process(lua_State *L)
+ 	return 1;
+ }
+ 
++extern int lua_yieldable(lua_State *L);
++
++struct lua_uloop_sleep_context {
++	struct uloop_timeout t;
++	lua_State *L;
++};
++
++static void ul_timer_sleep_cb(struct uloop_timeout *t)
++{
++	struct lua_uloop_sleep_context *ctx = container_of(t, struct lua_uloop_sleep_context, t);
++	lua_resume(ctx->L, 0);
++	free(ctx);
++}
++
++static int ul_sleep(lua_State *L)
++{
++	int ms = 0;
++	if (lua_isnumber(L, -1) || lua_isinteger(L, -1)) {
++		ms = lua_tointeger(L, -1);
++	}
++
++	if(ms < 0) {
++		return 0;
++	}
++
++	if(lua_yieldable(L)) {
++		struct lua_uloop_sleep_context *ctx = malloc(sizeof(struct lua_uloop_sleep_context));
++		if(ctx) {
++			memset(ctx, 0, sizeof(*ctx));
++			ctx->L = L;
++			ctx->t.cb = ul_timer_sleep_cb;
++			uloop_timeout_set(&ctx->t, ms);
++			return lua_yield(L, 0);
++		}
++	}
++
++	sleep(ms / 1000);
++	return 0;
++}
++
+ static int ul_init(lua_State *L)
+ {
+ 	uloop_init();
+@@ -415,6 +473,7 @@ static luaL_reg uloop_func[] = {
+ 	{"process", ul_process},
+ 	{"fd_add", ul_ufd_add},
+ 	{"cancel", ul_end},
++	{"sleep", ul_sleep},
+ 	{NULL, NULL},
+ };
+ 

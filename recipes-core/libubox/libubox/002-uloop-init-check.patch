@@ -1,0 +1,25 @@
+Index: libubox-2019-10-21-eb30a030/uloop.c
+===================================================================
+--- libubox-2019-10-21-eb30a030.orig/uloop.c
++++ libubox-2019-10-21-eb30a030/uloop.c
+@@ -579,3 +579,8 @@ void uloop_done(void)
+ 	uloop_clear_timeouts();
+ 	uloop_clear_processes();
+ }
++
++int uloop_is_inited()
++{
++    return (poll_fd >= 0);
++}
+Index: libubox-2019-10-21-eb30a030/uloop.h
+===================================================================
+--- libubox-2019-10-21-eb30a030.orig/uloop.h
++++ libubox-2019-10-21-eb30a030/uloop.h
+@@ -104,6 +104,7 @@ static inline void uloop_end(void)
+ 	uloop_cancelled = true;
+ }
+ 
++int uloop_is_inited();
+ int uloop_init(void);
+ int uloop_run_timeout(int timeout);
+ static inline int uloop_run(void)
