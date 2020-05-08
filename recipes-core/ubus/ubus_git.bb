@@ -10,7 +10,7 @@ DEPENDS = "json-c libubox"
 
 SRC_URI = "git://git.openwrt.org/project/ubus.git"
 
-SRCREV = "34c6e818e431cc53478a0f7c7c1eca07d194d692"
+SRCREV = "171469e3138cce191892e20b6fd35b52c9368064"
 
 S = "${WORKDIR}/git"
 
