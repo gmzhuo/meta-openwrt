@@ -18,7 +18,7 @@ SRC_URI = " \
 			git://github.com/gmzhuo/capwap.git;protocol=https \
 		"
 
-DEPENDS = "libubox libev ubus curl util-linux libcore libunwind openssl vpp-core"
+DEPENDS = "libubox libev ubus curl util-linux libcore libunwind openssl vpp-core vpp-libmemif"
 
 inherit cmake
 OECMAKE_SOURCEPATH = "${S}/src"
@@ -35,4 +35,5 @@ FILES_${PN} += " \
 			/usr/share/vpp/scripts/interface-up.txt \
 			"
 
-SRCREV = "c9c30fc401b0b2728fabe39fa2df251eeacd5f3e"
+SRCREV = "08c87706084785dc3826e50f78512a11af3f1ffc"
+
