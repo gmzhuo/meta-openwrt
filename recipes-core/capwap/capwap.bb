@@ -22,9 +22,13 @@ DEPENDS = "libubox libev ubus curl util-linux libcore libunwind openssl vpp-core
 
 inherit cmake
 OECMAKE_SOURCEPATH = "${S}/src"
+TOOLCHAIN_OPTIONS += " -Wall -fpermissive "
+CXXFLAGS += " -std=c++17 "
 
 # Specify any options you want to pass to cmake using EXTRA_OECMAKE:
 EXTRA_OECMAKE = " -DCOMPILE_WITH_VCL=1 "
+OECMAKE_TARGET_COMPILE = "AC"
+OECMAKE_TARGET_INSTALL = "AC"
 
 do_install_append() {
 	mkdir -p ${D}/usr/share/vpp/scripts/
@@ -35,5 +39,5 @@ FILES_${PN} += " \
 			/usr/share/vpp/scripts/interface-up.txt \
 			"
 
-SRCREV = "8cdc8dc7c2cf6d5685eb07dae12a04f72dc094bc"
+SRCREV = "07edcf081c7f6ee875519e5fc8da49e2e5819840"
 
