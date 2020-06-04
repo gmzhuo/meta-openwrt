@@ -34,4 +34,4 @@ do_install_append() {
 	mv -v ${D}/${libdir}/servd/libbase.so ${D}/${libdir}/servd/base.so
 }
 
-SRCREV = "5dc4c223dfad016e7d4cbcd2fda80b02437812b7"
+SRCREV = "8d241bd8a1a16ceb1fb95458b91129b96139f564"
