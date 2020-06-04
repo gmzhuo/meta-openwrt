@@ -18,7 +18,7 @@ SRC_URI = " \
 			git://github.com/gmzhuo/capwap.git;protocol=https \
 		"
 
-DEPENDS = "libubox libev ubus curl util-linux libcore libunwind openssl vpp-core vpp-libmemif"
+DEPENDS = "libubox libev ubus curl util-linux libcore libunwind openssl vpp-core vpp-libmemif libnl"
 
 inherit cmake
 OECMAKE_SOURCEPATH = "${S}/src"
@@ -27,17 +27,19 @@ CXXFLAGS += " -std=c++17 "
 
 # Specify any options you want to pass to cmake using EXTRA_OECMAKE:
 EXTRA_OECMAKE = " -DCOMPILE_WITH_VCL=1 "
-OECMAKE_TARGET_COMPILE = "AC"
-OECMAKE_TARGET_INSTALL = "AC"
+#OECMAKE_TARGET_COMPILE = "AC"
+#OECMAKE_TARGET_INSTALL = "AC"
 
 do_install_append() {
 	mkdir -p ${D}/usr/share/vpp/scripts/
+	mkdir -p ${D}/usr/bin
 	cp ${S}/files/interface-up.txt ${D}/usr/share/vpp/scripts/interface-up.txt
+	cp ${B}/AC* ${D}/usr/bin/ -rfd
 }
 
 FILES_${PN} += " \
 			/usr/share/vpp/scripts/interface-up.txt \
 			"
 
-SRCREV = "4424f477cf9f506bca0dae662b0d314b85e40ebc"
+SRCREV = "faac8d2a923eb89a83140155adf7fb4e1d2c11db"
 
