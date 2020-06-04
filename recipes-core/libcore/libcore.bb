@@ -28,7 +28,7 @@ OECMAKE_SOURCEPATH = "${S}/src"
 EXTRA_OECMAKE = ""
 
 
-SRCREV = "1087bc68135b87bef7c9d413ee55f7ffb2a7bed6"
+SRCREV = "734125630e0bde6701b8c279d1228596ec75c1ef"
 #inherit externalsrc
 #EXTERNALSRC = "/data/work/packages/libcore/src"
 
