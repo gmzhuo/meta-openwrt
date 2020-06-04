@@ -39,5 +39,5 @@ FILES_${PN} += " \
 			/usr/share/vpp/scripts/interface-up.txt \
 			"
 
-SRCREV = "07edcf081c7f6ee875519e5fc8da49e2e5819840"
+SRCREV = "4424f477cf9f506bca0dae662b0d314b85e40ebc"
 
